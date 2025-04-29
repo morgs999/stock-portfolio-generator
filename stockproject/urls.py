@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from stockapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('stockapp', include('stockapp.urls'))
+    path('', views.home, name='home'),  # Add a home view for the root URL
+    path('', include('stockapp.urls')),  # Include app URLs, but now the root URL is handled above
 ]

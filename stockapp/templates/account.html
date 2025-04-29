@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-card">
+        <div class="form-header">
+            <h2>Account Information</h2>
+        </div>
+        <div class="form-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="{{ form.user.id_for_label }}">Username</label>
+                    {{ form.user }}
+                    {% if form.user.errors %}
+                    <div class="error-message">
+                        {{ form.user.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.balance.id_for_label }}">Initial Balance</label>
+                    <div class="input-with-prefix">
+                        <span class="prefix">$</span>
+                        {{ form.balance }}
+                    </div>
+                    {% if form.balance.errors %}
+                    <div class="error-message">
+                        {{ form.balance.errors }}
+                    </div>
+                    {% endif %}
+                    <div class="help-text">
+                        Enter your initial deposit amount (up to 8 digits)
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="{{ form.account_type.id_for_label }}">Account Type</label>
+                    {{ form.account_type }}
+                    {% if form.account_type.errors %}
+                    <div class="error-message">
+                        {{ form.account_type.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

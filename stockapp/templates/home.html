@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="welcome-container">
+    <h1>Welcome to Stock Portfolio Generator</h1>
+    <p>Create and manage your stock portfolio with our easy-to-use tools.</p>
+
+    <div class="action-buttons">
+        <a href="{% url 'account' %}" class="button primary-button">Go to Account</a>
+        <a href="{% url 'account_form' %}" class="button secondary-button">Create Account</a>
+    </div>
+</div>
+{% endblock %}

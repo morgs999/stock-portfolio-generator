@@ -175,3 +175,5 @@ cython_debug/
 
 *.DS_Store
 *.csv
+logins.rtf
+.pylintrc
