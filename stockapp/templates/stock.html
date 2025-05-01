@@ -1,0 +1,35 @@
+{% block content %}
+<div class="stock-container">
+    <h2>Featured Stocks</h2>
+    {% if data %}
+    <div class="stock-list">
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Name</th>
+                    <th>Market</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in data.results %}
+                <tr>
+                    <td>{{ result.ticker }}</td>
+                    <td>{{ result.name }}</td>
+                    <td>{{ result.market }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No stocks found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elif error %}
+    <div class="error-message">{{ error }}</div>
+    {% else %}
+    <p>No stock data available.</p>
+    {% endif %}
+</div>
+{% endblock %}

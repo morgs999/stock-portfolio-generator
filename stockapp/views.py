@@ -1,3 +1,5 @@
+import os
+import requests
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -6,10 +8,27 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from . import models, forms
 
-# Create your views here.
 def home(request):
     """Home Page"""
-    return render(request, 'home.html')
+    stock_data = get_data_from_polygon(request, inclusion=True)
+    return render(request, 'home.html', stock_data)
+
+def get_data_from_polygon(request, inclusion=False):
+    api_key = os.environ.get('POLYGON_API_KEY', '')
+    url = f'https://api.polygon.io/v3/reference/tickers?ticker=GOOG&market=stocks&active=true&order=asc&limit=100&sort=ticker&apiKey={api_key}'
+    response = requests.get(url, timeout=10)
+
+    if response.status_code == 200:
+        data = response.json()
+        context = {'data': data}
+    else:
+        error_message = f"API Error: {response.status_code} - {response.text}"
+        context = {'error': error_message}
+
+    if inclusion:
+        return context
+
+    return render(request, 'stock.html', context)
 
 @login_required
 def dashboard(request):

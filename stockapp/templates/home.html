@@ -6,8 +6,11 @@
     <p>Create and manage your stock portfolio with our easy-to-use tools.</p>
 
     <div class="action-buttons">
-        <a href="{% url 'account' %}" class="button primary-button">Go to Account</a>
-        <a href="{% url 'account_form' %}" class="button secondary-button">Create Account</a>
+        <a href="{% url 'dashboard' %}" class="button primary-button">Go to Account</a>
+    </div>
+
+    <div>
+        {% include "stock.html" with data=data error=error %}
     </div>
 </div>
 {% endblock %}
