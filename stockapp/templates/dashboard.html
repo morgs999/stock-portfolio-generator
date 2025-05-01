@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard">
+    <h1>Welcome to Your Dashboard</h1>
+    <ul>
+        <li><a href="/portfolio">Portfolio</a></li>
+        <li><a href="/transactions">Transactions</a></li>
+        <li><a href="/settings">Settings</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+    <section id="portfolio-summary">
+        <h2>Portfolio Summary</h2>
+        <p>Total Value: $<span id="total-value">0.00</span></p>
+        <p>Gains/Losses: $<span id="gains-losses">0.00</span></p>
+    </section>
+    <section id="recent-activity">
+        <h2>Recent Activity</h2>
+        <ul id="activity-list">
+            <li>No recent activity</li>
+        </ul>
+    </section>
+</div>
+{% endblock %}

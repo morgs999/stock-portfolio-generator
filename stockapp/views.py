@@ -1,14 +1,25 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views import View
+from django.contrib.auth.decorators import login_required
 from . import models, forms
 
 # Create your views here.
 def home(request):
-    '''Home page view'''
+    """Home Page"""
     return render(request, 'home.html')
+
+@login_required
+def dashboard(request):
+    """User Dashboard"""
+    return render(request, 'dashboard.html')
+
+def logout_view(request):
+    """User Logout"""
+    logout(request)
+    return redirect('home')
 
 class LoginView(View):
     def get(self, request):
@@ -18,10 +29,12 @@ class LoginView(View):
     def post(self, request):
         form = forms.LoginForm(request.POST)
         if form.is_valid():
-            authenticated_user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+            authenticated_user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if authenticated_user:
                 # Redirect to a success page or dashboard
-                return HttpResponse("Login successful.")
+                # return HttpResponse("Login successful.")
+                login(request, authenticated_user)
+                return redirect('home')
         return render(request, 'login.html', {'form': form})
 
 class RegisterView(View):

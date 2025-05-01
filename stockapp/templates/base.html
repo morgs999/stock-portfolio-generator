@@ -19,12 +19,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item" href="'/login/'">
-                    <a class="nav-link" href="/login/">Login</a>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard/">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/account/">Account</a>
+                    <a class="nav-link" href="/logout/">Logout</a>
                 </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login/">Login</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
@@ -35,9 +41,9 @@
     </main>
 
     <!-- Footer -->
-    <footer>
+    <!-- <footer>
         <p>&copy; 2025 Stock Portfolio Generator</p>
-    </footer>
+    </footer> -->
 </body>
 
 </html>

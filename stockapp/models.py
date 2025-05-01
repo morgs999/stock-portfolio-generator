@@ -67,7 +67,7 @@ class Transaction(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
-    
+
     def __str__(self):
         return f"${abs(self.amount):.2f} {'debit' if self.amount < 0 else 'credit'} on {self.timestamp.strftime('%Y-%m-%d %H:%M')}"
 
@@ -79,7 +79,7 @@ class Stock(models.Model):
     # current_price = models.DecimalField(decimal_places=2)
     # purchase_prices = models.DecimalField(decimal_places=2)
     # quantity = models.DecimalField(decimal_places=2)
-    
+
     # open = models.DecimalField(decimal_places=2)
     # high = models.DecimalField(decimal_places=2)
     # low = models.DecimalField(decimal_places=2)
