@@ -1,6 +1,10 @@
 from django import forms
 from . import models
 
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=35, required=True, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    password = forms.CharField(max_length=25, required=True, widget=forms.PasswordInput(attrs={'class': 'form-input'}))
+
 class AccountForm(forms.Form):
     user = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-input'}))
 
