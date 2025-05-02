@@ -177,3 +177,5 @@ cython_debug/
 *.csv
 logins.rtf
 .pylintrc
+node_modules/
+package-lock.json

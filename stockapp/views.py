@@ -33,7 +33,7 @@ def get_data_from_polygon(request, inclusion=False):
 @login_required
 def dashboard(request):
     """User Dashboard"""
-    return render(request, 'dashboard.html')
+    return render(request, 'dashboard.html', {'user': request.user})
 
 def logout_view(request):
     """User Logout"""
@@ -50,10 +50,8 @@ class LoginView(View):
         if form.is_valid():
             authenticated_user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if authenticated_user:
-                # Redirect to a success page or dashboard
-                # return HttpResponse("Login successful.")
                 login(request, authenticated_user)
-                return redirect('home')
+                return redirect('dashboard')
         return render(request, 'login.html', {'form': form})
 
 class RegisterView(View):
@@ -66,8 +64,8 @@ class RegisterView(View):
         if form.is_valid():
             user = User.objects.create_user(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user:
-                # Redirect to a success page or dashboard
-                return HttpResponse("Registration successful.")
+                login(request, user)
+                return redirect('dashboard', {'user': user})
 
         return render(request, 'register.html', {'form': form})
 
