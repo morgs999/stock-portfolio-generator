@@ -175,7 +175,7 @@ cython_debug/
 
 *.DS_Store
 *.csv
-logins.rtf
+logins
 .pylintrc
 node_modules/
 package-lock.json
