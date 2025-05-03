@@ -20,6 +20,6 @@ from stockapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),  # Add a home view for the root URL
-    path('', include('stockapp.urls')),  # Include app URLs, but now the root URL is handled above
+    path('', views.home, name='home'),
+    path('', include('stockapp.urls')),
 ]

@@ -1,3 +1,4 @@
+from django.forms import ModelForm
 from django import forms
 from . import models
 
@@ -5,17 +6,11 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=35, required=True, widget=forms.TextInput(attrs={'class': 'form-input'}))
     password = forms.CharField(max_length=25, required=True, widget=forms.PasswordInput(attrs={'class': 'form-input'}))
 
-class AccountForm(forms.Form):
-    balance = forms.DecimalField(max_digits=8, decimal_places=2, required=True, widget=forms.NumberInput(attrs={'class': 'form-input', 'min': '0.00', 'step': '0.01'}))
+class AccountForm(ModelForm):
+    balance = forms.DecimalField(decimal_places=2)
 
-    account_type = forms.ChoiceField(choices=[('checking', 'Checking'), ('savings', 'Savings')], required=True, widget=forms.Select(attrs={'class': 'form-select'}))
+    account_type = forms.CharField()
 
-    def save(self):
-        """Save the form data to the database"""
-        account = models.Account(
-            user=self.cleaned_data['user'],
-            balance=self.cleaned_data['balance'],
-            account_type=self.cleaned_data['account_type']
-        )
-        account.save()
-        return account
+    class Meta:
+        model = models.Account
+        fields = ['balance', 'account_type']

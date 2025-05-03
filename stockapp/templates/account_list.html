@@ -1,0 +1,9 @@
+{% block main %}
+
+<p>accounts</p>
+{% for account in stockapp_accounts %}
+<p>{{stockapp_account.account_type}}</p>
+<p>${{stockapp_account.balance}}</p>
+{% endfor %}
+
+{% endblock %}

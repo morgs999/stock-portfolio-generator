@@ -25,10 +25,22 @@
         <p class="mt-2 text-blue-100">Manage your stock portfolio and track your investments</p>
     </div>
 
+    <div class="rounded-lg shadow-lg p-6 text-red-500">
+        <a class="nav-link text-black" href="/account">
+            <h2>
+                Add your accounts
+            </h2>
+        </a>
+    </div>
+    <div class="rounded-lg shadow-lg p-6">
+        <h1>Your Accounts:</h1>
+        {% include "account_list.html" %}
+    </div>
+
     <!-- Stats overview -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- Account Balance -->
-        <div class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
+        <!-- <div class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-green-100 text-green-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
@@ -42,10 +54,10 @@
                     <p class="text-2xl font-semibold text-gray-800">$10,250.00</p>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Portfolio Value -->
-        <div class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
+        <!-- <div class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-blue-100 text-blue-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
@@ -59,10 +71,10 @@
                     <p class="text-2xl font-semibold text-gray-800">$<span id="total-value">8,432.75</span></p>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Gains/Losses -->
-        <div class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
+        <!-- <div class="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow">
             <div class="flex items-center">
                 <div class="p-3 rounded-full bg-green-100 text-green-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
@@ -76,13 +88,13 @@
                     <p class="text-2xl font-semibold text-green-600">$<span id="gains-losses">+412.50</span></p>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Main content area -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Portfolio section -->
-        <div class="lg:col-span-2">
+        <!-- <div class="lg:col-span-2">
             <div class="bg-white rounded-lg shadow mb-6">
                 <div class="border-b border-gray-200 px-6 py-4">
                     <h3 class="text-lg font-medium text-gray-900">Your Portfolio</h3>
@@ -148,10 +160,10 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- Activity section -->
-        <div class="lg:col-span-1">
+        <!-- <div class="lg:col-span-1">
             <div class="bg-white rounded-lg shadow">
                 <div class="border-b border-gray-200 px-6 py-4">
                     <h3 class="text-lg font-medium text-gray-900">Recent Activity</h3>
@@ -198,7 +210,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 {% endblock %}

@@ -43,7 +43,7 @@ body {
 }
 
 .nav-link {
-    color: white;
+    color: orange;
     text-decoration: none;
 }
 
@@ -56,6 +56,10 @@ main {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
+}
+
+.account-text {
+    color: black;
 }
 
 /* Stock Styles */

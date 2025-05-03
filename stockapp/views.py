@@ -5,7 +5,9 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.views import View
+from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
+from stockapp.forms import AccountForm
 from . import models, forms
 
 def home(request):
@@ -90,3 +92,20 @@ class AccountView(View):
         else:
             form = forms.AccountForm()
         return render(request, 'account.html', {'form': form})
+
+@login_required
+def addaccount(request):
+    if request.method == 'POST':
+        form = AccountForm(request.POST)
+        if form.is_valid():
+            account = form.save(commit=False)
+            account.user = request.user
+            account.save()
+        return redirect('dashboard')
+    return render(request, 'account.html', {'form': AccountForm})
+
+
+class AccountListView(ListView):
+    model = models.Account
+    context_object_name = 'stockapp_account'
+    queryset = models.Account
