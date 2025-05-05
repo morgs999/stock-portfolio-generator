@@ -35,7 +35,11 @@ def get_data_from_polygon(request, inclusion=False):
 @login_required
 def dashboard(request):
     """User Dashboard"""
-    return render(request, 'dashboard.html', {'user': request.user})
+    accounts = models.Account.objects.filter(user=request.user)
+    return render(request, 'dashboard.html', {
+        'user': request.user,
+        'stockapp_accounts': accounts  # Add this line
+    })
 
 def logout_view(request):
     """User Logout"""
@@ -107,5 +111,7 @@ def addaccount(request):
 
 class AccountListView(ListView):
     model = models.Account
-    context_object_name = 'stockapp_account'
-    queryset = models.Account
+    context_object_name = 'stockapp_accounts'
+    def get_queryset(self):
+        #only for currently logged in users
+        return models.Account.objects.filter(user=self.request.user)

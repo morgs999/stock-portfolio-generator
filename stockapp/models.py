@@ -58,7 +58,10 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2)
 
     TRANSACTION_TYPES = [
-        'Deposit', 'Withdrawal', 'Interest', 'Fee'
+        ('Deposit', 'Deposit'),
+        ('Withdrawal', 'Withdrawal'),
+        ('Interest', 'Interest'),
+        ('Fee', 'Fee')
     ]
 
     # transaction_type = models.CharField(choices=TRANSACTION_TYPES)
