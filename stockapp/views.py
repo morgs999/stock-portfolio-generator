@@ -1,5 +1,7 @@
 import os
 import requests
+import json
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -7,30 +9,70 @@ from django.contrib.auth.models import User
 from django.views import View
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
+from dotenv import load_dotenv
 from stockapp.forms import AccountForm
 from . import models, forms
 
+load_dotenv()
+
+
 def home(request):
     """Home Page"""
-    stock_data = get_data_from_polygon(request, inclusion=True)
-    return render(request, 'home.html', stock_data)
+    data = get_data(request, inclusion=True)
+    print('home page data', data)
+    return render(request, 'home.html', data)
 
-def get_data_from_polygon(request, inclusion=False):
-    api_key = os.environ.get('POLYGON_API_KEY', '')
-    url = f'https://api.polygon.io/v3/reference/tickers?ticker=GOOG&market=stocks&active=true&order=asc&limit=100&sort=ticker&apiKey={api_key}'
+
+def get_data(request, inclusion=True):
+    """simple polygon pull"""
+    data = {}
+    # api_key = os.environ.get('STOCK_API_KEY', '')
+    api_key = 'buttfarts'
+    symbol = 'GOOG'
+
+    url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}'
+
     response = requests.get(url, timeout=10)
+    data = response.json()
 
-    if response.status_code == 200:
-        data = response.json()
-        context = {'data': data}
-    else:
-        error_message = f"API Error: {response.status_code} - {response.text}"
-        context = {'error': error_message}
+    # run with the backup stock.json file if the api call doesn't work
+    if data['Information']:
+        json_file = os.path.join(settings.BASE_DIR, 'stock.json')
+        try:
+            with open(json_file, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                # print('file pulled successfully')
+        except FileNotFoundError:
+            data = {'error': 'file not found, url not run'}
+            # print('file not pulled')
+
+    meta_data = data.get('Meta Data', {})
+    symbol = meta_data.get('2. Symbol', 'Unknown')
+    time_series = data.get('Time Series (Daily)', {})
+    today = next(iter(time_series))
+    latest_data = time_series[today]
+    open_price = float(latest_data.get('1. open', 0))
+    close_price = float(latest_data.get('4. close', 0))
+    high_price = float(latest_data.get('2. high', 0))
+    low_price = float(latest_data.get('3. low', 0))
+    volume = float(latest_data.get('5. volume', 0))
+
+    context = {
+        'symbol': symbol,
+        'date': today,
+        'open_price': open_price,
+        'close_price': close_price,
+        'high_price': high_price,
+        'low_price': low_price,
+        'volume': volume,
+        # 'data': data
+    }
 
     if inclusion:
         return context
 
     return render(request, 'stock.html', context)
+
 
 @login_required
 def dashboard(request):
@@ -41,10 +83,12 @@ def dashboard(request):
         'stockapp_accounts': accounts  # Add this line
     })
 
+
 def logout_view(request):
     """User Logout"""
     logout(request)
     return redirect('home')
+
 
 class LoginView(View):
     def get(self, request):
@@ -60,6 +104,7 @@ class LoginView(View):
                 return redirect('dashboard')
         return render(request, 'login.html', {'form': form})
 
+
 class RegisterView(View):
     def get(self, request):
         form = forms.LoginForm()
@@ -71,9 +116,10 @@ class RegisterView(View):
             user = User.objects.create_user(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user:
                 login(request, user)
-                return redirect('dashboard', {'user': user})
+                return redirect('dashboard')
 
         return render(request, 'register.html', {'form': form})
+
 
 class AccountView(View):
     def get(self, request):
@@ -97,6 +143,7 @@ class AccountView(View):
             form = forms.AccountForm()
         return render(request, 'account.html', {'form': form})
 
+
 @login_required
 def addaccount(request):
     if request.method == 'POST':
@@ -106,7 +153,7 @@ def addaccount(request):
             account.user = request.user
             account.save()
         return redirect('dashboard')
-    return render(request, 'account.html', {'form': AccountForm})
+    return render(request, 'account.html', {'form': AccountForm()})
 
 
 class AccountListView(ListView):

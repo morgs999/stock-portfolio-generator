@@ -12,11 +12,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% for result in data.results %}
+                {% for data in data %}
                 <tr>
-                    <td>{{ result.ticker }}</td>
-                    <td>{{ result.name }}</td>
-                    <td>{{ result.market }}</td>
+                    <td>{{ 12344 }}</td>
+                    <td>{{ 13 }}</td>
+                    <td>{{ 123 }}</td>
                 </tr>
                 {% empty %}
                 <tr>
@@ -31,5 +31,6 @@
     {% else %}
     <p>No stock data available.</p>
     {% endif %}
+
 </div>
 {% endblock %}

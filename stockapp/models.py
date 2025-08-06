@@ -64,7 +64,7 @@ class Transaction(models.Model):
         ('Fee', 'Fee')
     ]
 
-    # transaction_type = models.CharField(choices=TRANSACTION_TYPES)
+    transaction_type = models.CharField(choices=TRANSACTION_TYPES)
 
     timestamp = models.DateTimeField(default=timezone.now)
 
