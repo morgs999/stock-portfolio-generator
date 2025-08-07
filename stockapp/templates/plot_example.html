@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="plot-container">
+    <h2>Stock Chart Example</h2>
+    {% if graphic %}
+    <img src="data:image/png;base64,{{ graphic }}" alt="Stock Chart">
+    {% else %}
+    <p>No chart available</p>
+    {% endif %}
+</div>
+{% endblock %}

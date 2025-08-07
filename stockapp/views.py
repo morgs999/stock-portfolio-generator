@@ -10,6 +10,14 @@ from django.views import View
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from dotenv import load_dotenv
+
+import io
+import base64
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import numpy as np
+
 from stockapp.forms import AccountForm
 from . import models, forms
 
@@ -21,6 +29,65 @@ def home(request):
     data = get_data(request, inclusion=True)
     print('home page data', data)
     return render(request, 'home.html', data)
+
+
+def simple_plot(request):
+    x = np.linspace(0, 2 * np.pi, 200)
+    y = np.sin(x)
+
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+    ax.set_title('Sine Wave')
+    ax.set_xlabel('Z')
+    ax.set_ylabel('Y')
+
+    # Save to a string buffer
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+
+    # Convert to base64 for embedding in HTML
+    image_png = buffer.getvalue()
+    buffer.close()
+    graphic = base64.b64encode(image_png)
+    graphic = graphic.decode('utf-8')
+
+    plt.close()  # Important: close the figure to free memory
+
+    context = {'graphic': graphic}
+
+    # return render(request, 'plot_example.html', context)
+
+def stock_chart(request):
+    # Get your stock data
+    data = get_data(request, inclusion=True)
+    
+    if data.get('success'):
+        # Create sample data for demonstration
+        dates = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+        prices = [150.0, 152.5, 148.0, 155.0, data['close_price']]
+        
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(dates, prices, marker='o', linewidth=2)
+        ax.set_title(f'{data["symbol"]} Stock Price')
+        ax.set_ylabel('Price ($)')
+        ax.grid(True, alpha=0.3)
+        
+        # Save to base64
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', dpi=100, bbox_inches='tight')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+        
+        graphic = base64.b64encode(image_png).decode('utf-8')
+        plt.close()
+        
+        context = {'graphic': graphic, 'symbol': data['symbol']}
+    else:
+        context = {'error': 'No stock data available'}
+    
+    return render(request, 'plot_example.html', context)
 
 
 def get_data(request, inclusion=True):
@@ -36,7 +103,7 @@ def get_data(request, inclusion=True):
     data = response.json()
 
     # run with the backup stock.json file if the api call doesn't work
-    if data['Information']:
+    if 'Information' in data:
         json_file = os.path.join(settings.BASE_DIR, 'stock.json')
         try:
             with open(json_file, 'r', encoding='utf-8') as file:
@@ -65,7 +132,8 @@ def get_data(request, inclusion=True):
         'high_price': high_price,
         'low_price': low_price,
         'volume': volume,
-        # 'data': data
+        # 'data': data,
+        'success': True,
     }
 
     if inclusion:
