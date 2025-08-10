@@ -1,6 +1,11 @@
 import os
-import requests
 import json
+import io
+import base64
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import requests
 from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -10,17 +15,12 @@ from django.views import View
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from dotenv import load_dotenv
-
-import io
-import base64
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import numpy as np
+import pandas as pd
 
 from stockapp.forms import AccountForm
 from . import models, forms
 
+matplotlib.use('Agg')
 load_dotenv()
 
 
@@ -56,7 +56,8 @@ def simple_plot(request):
 
     context = {'graphic': graphic}
 
-    # return render(request, 'plot_example.html', context)
+    return render(request, 'plot_example.html', context)
+
 
 def stock_chart(request):
     # Get your stock data
@@ -87,17 +88,18 @@ def stock_chart(request):
     else:
         context = {'error': 'No stock data available'}
     
-    return render(request, 'plot_example.html', context)
+    # return render(request, 'plot_example.html', context)
 
 
 def get_data(request, inclusion=True):
     """simple polygon pull"""
     data = {}
-    # api_key = os.environ.get('STOCK_API_KEY', '')
-    api_key = 'buttfarts'
-    symbol = 'GOOG'
+    api_key = os.environ.get('STOCK_API_KEY', '')
+    # api_key = 'buttfarts'
+    symbol = 'AAPL'
 
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&apikey={api_key}'
+    # print(url)
 
     response = requests.get(url, timeout=10)
     data = response.json()
